@@ -114,16 +114,18 @@ const onGalleryImgClick = event => {
     return;
   }
 
-  refs.lightbox.classList.add('is-open');
-  bodyScrollLock();
   refs.lightboxImg.src = `${event.target.dataset.source}`;
+  setTimeout(() => {
+    refs.lightbox.classList.add('is-open');
+    bodyScrollLock();
 
-  refs.lightboxBtnClose.addEventListener('click', onLigthboxCloseClick);
-  window.addEventListener('keydown', onLigthboxCloseEsc);
-  refs.lightbox.addEventListener('click', onLigthboxCloseBackdropClick);
+    refs.lightboxBtnClose.addEventListener('click', onLigthboxCloseClick);
+    window.addEventListener('keydown', onLigthboxCloseEsc);
+    refs.lightbox.addEventListener('click', onLigthboxCloseBackdropClick);
 
-  window.addEventListener('keydown', onLightboxNextImg);
-  window.addEventListener('keydown', onLightboxPriviousImg);
+    window.addEventListener('keydown', onLightboxNextImg);
+    window.addEventListener('keydown', onLightboxPriviousImg);
+  }, 100);
 };
 
 refs.gallery.addEventListener('click', onGalleryImgClick);
