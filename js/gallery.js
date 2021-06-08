@@ -27,9 +27,18 @@ const createGalleryArr = galleryItems.map(image => {
 
 refs.gallery.insertAdjacentHTML('beforeend', createGalleryArr.join(''));
 
+const onLigthboxCloseClick = () => {
+  refs.lightbox.classList.remove('is-open');
+  bodyScrollLock();
+  window.removeEventListener('keydown', onLigthboxCloseEsc);
+  window.removeEventListener('keydown', onLightboxNextImg);
+  window.removeEventListener('keydown', onLightboxPriviousImg);
+};
+
 const onLigthboxCloseEsc = event => {
   if (event.code === 'Escape') {
     refs.lightbox.classList.remove('is-open');
+    bodyScrollLock();
     window.removeEventListener('keydown', onLigthboxCloseEsc);
     window.removeEventListener('keydown', onLightboxNextImg);
     window.removeEventListener('keydown', onLightboxPriviousImg);
@@ -39,6 +48,7 @@ const onLigthboxCloseEsc = event => {
 const onLigthboxCloseBackdropClick = event => {
   if (event.target === refs.lightboxOverlay) {
     refs.lightbox.classList.remove('is-open');
+    bodyScrollLock();
     window.removeEventListener('keydown', onLigthboxCloseEsc);
     window.removeEventListener('keydown', onLightboxNextImg);
     window.removeEventListener('keydown', onLightboxPriviousImg);
@@ -87,7 +97,17 @@ const onLightboxPriviousImg = event => {
   }
 };
 
-refs.gallery.addEventListener('click', event => {
+const bodyScrollLock = () => {
+  if (refs.lightbox.classList.contains('is-open')) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.width = 'calc(100% - 15px)';
+  } else {
+    document.body.style.overflow = 'auto';
+    document.body.style.width = '100%';
+  }
+};
+
+const onGalleryImgClick = event => {
   event.preventDefault();
 
   if (event.target.nodeName !== 'IMG') {
@@ -95,18 +115,15 @@ refs.gallery.addEventListener('click', event => {
   }
 
   refs.lightbox.classList.add('is-open');
+  bodyScrollLock();
   refs.lightboxImg.src = `${event.target.dataset.source}`;
+
+  refs.lightboxBtnClose.addEventListener('click', onLigthboxCloseClick);
   window.addEventListener('keydown', onLigthboxCloseEsc);
   refs.lightbox.addEventListener('click', onLigthboxCloseBackdropClick);
+
   window.addEventListener('keydown', onLightboxNextImg);
   window.addEventListener('keydown', onLightboxPriviousImg);
-});
-
-const onLigthboxCloseClick = () => {
-  refs.lightbox.classList.remove('is-open');
-  window.removeEventListener('keydown', onLigthboxCloseEsc);
-  window.removeEventListener('keydown', onLightboxNextImg);
-  window.removeEventListener('keydown', onLightboxPriviousImg);
 };
 
-refs.lightboxBtnClose.addEventListener('click', onLigthboxCloseClick);
+refs.gallery.addEventListener('click', onGalleryImgClick);
