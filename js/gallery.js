@@ -29,6 +29,7 @@ refs.gallery.insertAdjacentHTML('beforeend', createGalleryArr.join(''));
 const onLigthboxCloseClick = () => {
   refs.lightbox.classList.remove('is-open');
   bodyScrollLock();
+  refs.lightboxImg.src = `#`;
   window.removeEventListener('keydown', onLigthboxCloseEsc);
   window.removeEventListener('keydown', onLightboxNextImg);
   window.removeEventListener('keydown', onLightboxPriviousImg);
@@ -38,6 +39,7 @@ const onLigthboxCloseEsc = event => {
   if (event.code === 'Escape') {
     refs.lightbox.classList.remove('is-open');
     bodyScrollLock();
+    refs.lightboxImg.src = `#`;
     window.removeEventListener('keydown', onLigthboxCloseEsc);
     window.removeEventListener('keydown', onLightboxNextImg);
     window.removeEventListener('keydown', onLightboxPriviousImg);
@@ -48,6 +50,7 @@ const onLigthboxCloseBackdropClick = event => {
   if (event.target === refs.lightboxOverlay) {
     refs.lightbox.classList.remove('is-open');
     bodyScrollLock();
+    refs.lightboxImg.src = `#`;
     window.removeEventListener('keydown', onLigthboxCloseEsc);
     window.removeEventListener('keydown', onLightboxNextImg);
     window.removeEventListener('keydown', onLightboxPriviousImg);
@@ -124,7 +127,7 @@ const onGalleryImgClick = event => {
 
     window.addEventListener('keydown', onLightboxNextImg);
     window.addEventListener('keydown', onLightboxPriviousImg);
-  }, 100);
+  }, 50);
 };
 
 refs.gallery.addEventListener('click', onGalleryImgClick);
