@@ -2,7 +2,6 @@ import galleryItems from '../gallery-items.js';
 
 const refs = {
   gallery: document.querySelector('ul.js-gallery'),
-  // galleryImg: document.querySelector('.gallery__image'),
   lightbox: document.querySelector('.js-lightbox'),
   lightboxBtnClose: document.querySelector('[data-action="close-lightbox"]'),
   lightboxImg: document.querySelector('.js-lightbox .lightbox__image'),
@@ -129,3 +128,28 @@ const onGalleryImgClick = event => {
 };
 
 refs.gallery.addEventListener('click', onGalleryImgClick);
+
+const addLoadingLazy = () => {
+  const imagesEls = document.querySelectorAll('.gallery__image');
+
+  if ('loading' in HTMLImageElement.prototype) {
+    imagesEls.forEach(item => (item.loading = 'lazy'));
+  } else {
+    const scriptLazy = document.createElement('script');
+    scriptLazy.src =
+      'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    scriptLazy.integrity =
+      'sha512-q583ppKrCRc7N5O0n2nzUiJ+suUv7Et1JGels4bXOaMFQcamPk9HjdUknZuuFjBNs7tsMuadge5k9RzdmO+1GQ==';
+    scriptLazy.setAttribute('crossorigin', 'anonymous');
+    scriptLazy.setAttribute('referrerpolicy', 'no-referrer');
+    document.body.appendChild(scriptLazy);
+
+    imagesEls.forEach(item => {
+      item.classList.add('lazyload');
+      item.setAttribute('data-src', item.src);
+      item.removeAttribute('src');
+    });
+  }
+};
+
+addLoadingLazy();
