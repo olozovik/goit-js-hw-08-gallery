@@ -26,7 +26,7 @@ const createGalleryArr = galleryItems.map(image => {
 
 refs.gallery.insertAdjacentHTML('beforeend', createGalleryArr.join(''));
 
-const onLigthboxCloseClick = () => {
+const closeLightbox = () => {
   refs.lightbox.classList.remove('is-open');
   bodyScrollLock();
   refs.lightboxImg.src = `#`;
@@ -35,67 +35,58 @@ const onLigthboxCloseClick = () => {
   window.removeEventListener('keydown', onLightboxPriviousImg);
 };
 
+const onLigthboxCloseClick = () => {
+  closeLightbox();
+};
+
 const onLigthboxCloseEsc = event => {
   if (event.code === 'Escape') {
-    refs.lightbox.classList.remove('is-open');
-    bodyScrollLock();
-    refs.lightboxImg.src = `#`;
-    window.removeEventListener('keydown', onLigthboxCloseEsc);
-    window.removeEventListener('keydown', onLightboxNextImg);
-    window.removeEventListener('keydown', onLightboxPriviousImg);
+    closeLightbox();
   }
 };
 
 const onLigthboxCloseBackdropClick = event => {
   if (event.target === refs.lightboxOverlay) {
-    refs.lightbox.classList.remove('is-open');
-    bodyScrollLock();
-    refs.lightboxImg.src = `#`;
-    window.removeEventListener('keydown', onLigthboxCloseEsc);
-    window.removeEventListener('keydown', onLightboxNextImg);
-    window.removeEventListener('keydown', onLightboxPriviousImg);
+    closeLightbox();
   }
 };
 
-const findNextImgSrc = currentSrc => {
+const toCycleGallery = (currentSrc, eventCode) => {
   let currentIdx = 0;
+
   galleryItems.forEach((item, idx) => {
     if (item.original === currentSrc) {
       currentIdx = idx;
+      return;
     }
   });
 
-  if (currentIdx === galleryItems.length - 1) {
-    return galleryItems[0].original;
-  }
-
-  return galleryItems[currentIdx + 1].original;
-};
-
-const findPreviousImgSrc = currentSrc => {
-  let currentIdx = 0;
-  galleryItems.forEach((item, idx) => {
-    if (item.original === currentSrc) {
-      currentIdx = idx;
+  if (eventCode === 'ArrowRight') {
+    if (currentIdx === galleryItems.length - 1) {
+      return galleryItems[0].original;
+    } else {
+      return galleryItems[currentIdx + 1].original;
     }
-  });
-
-  if (currentIdx === 0) {
-    return galleryItems[galleryItems.length - 1].original;
   }
 
-  return galleryItems[currentIdx - 1].original;
+  if (eventCode === 'ArrowLeft') {
+    if (currentIdx === 0) {
+      return galleryItems[galleryItems.length - 1].original;
+    } else {
+      return galleryItems[currentIdx - 1].original;
+    }
+  }
 };
 
 const onLightboxNextImg = event => {
   if (event.code === 'ArrowRight') {
-    refs.lightboxImg.src = findNextImgSrc(refs.lightboxImg.src);
+    refs.lightboxImg.src = toCycleGallery(refs.lightboxImg.src, 'ArrowRight');
   }
 };
 
 const onLightboxPriviousImg = event => {
   if (event.code === 'ArrowLeft') {
-    refs.lightboxImg.src = findPreviousImgSrc(refs.lightboxImg.src);
+    refs.lightboxImg.src = toCycleGallery(refs.lightboxImg.src, 'ArrowLeft');
   }
 };
 
