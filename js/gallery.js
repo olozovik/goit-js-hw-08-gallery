@@ -51,7 +51,7 @@ const onLigthboxCloseBackdropClick = event => {
   }
 };
 
-const toCycleGallery = (currentSrc, eventCode) => {
+const changeImg = (currentSrc, eventCode) => {
   let currentIdx = 0;
 
   galleryItems.forEach((item, idx) => {
@@ -80,13 +80,13 @@ const toCycleGallery = (currentSrc, eventCode) => {
 
 const onLightboxNextImg = event => {
   if (event.code === 'ArrowRight') {
-    refs.lightboxImg.src = toCycleGallery(refs.lightboxImg.src, 'ArrowRight');
+    refs.lightboxImg.src = changeImg(refs.lightboxImg.src, 'ArrowRight');
   }
 };
 
 const onLightboxPriviousImg = event => {
   if (event.code === 'ArrowLeft') {
-    refs.lightboxImg.src = toCycleGallery(refs.lightboxImg.src, 'ArrowLeft');
+    refs.lightboxImg.src = changeImg(refs.lightboxImg.src, 'ArrowLeft');
   }
 };
 
